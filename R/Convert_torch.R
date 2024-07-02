@@ -41,8 +41,11 @@ convert_torch_sequential <- function(model) {
     } else if (inherits(modul, "nn_max_pool2d")) {
       model_as_list$layers[[num]] <- convert_torch_max_pool2d(modul, num)
       include_act <- TRUE
-    } else if (inherits(modul, "nn_dropout")|inherits(modul, "nn_dropout2d")) {
+    } else if (inherits(modul, "nn_dropout")) {
       model_as_list$layers[[num]] <- convert_torch_skipping("nn_dropout", num)
+      include_act <- FALSE
+    } else if (inherits(modul, "nn_dropout2d")) {
+      model_as_list$layers[[num]] <- convert_torch_skipping("nn_dropout2d", num)
       include_act <- FALSE
     } else if (inherits(modul, paste0("nn_", impl_acts))) {
       idx <-
